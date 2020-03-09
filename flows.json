@@ -1,0 +1,757 @@
+[
+    {
+        "id": "4b47108c.58227",
+        "type": "subflow",
+        "name": "Motor Controller",
+        "info": "Expects different messages\nAn \"On\" message and a \"Direction\" message",
+        "in": [
+            {
+                "x": 25,
+                "y": 219,
+                "wires": [
+                    {
+                        "id": "ce12ce4e.de73a"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1050,
+                "y": 91,
+                "wires": [
+                    {
+                        "id": "c7961919.cc7cf8",
+                        "port": 0
+                    },
+                    {
+                        "id": "d670f631.a6e298",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1053,
+                "y": 164,
+                "wires": [
+                    {
+                        "id": "c7961919.cc7cf8",
+                        "port": 0
+                    },
+                    {
+                        "id": "ad0a7311.d5efb",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 289,
+                "y": 67,
+                "wires": [
+                    {
+                        "id": "ce12ce4e.de73a",
+                        "port": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "ce12ce4e.de73a",
+        "type": "switch",
+        "z": "4b47108c.58227",
+        "name": "Split Messages",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Speed",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "On",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Direction",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 3,
+        "x": 165,
+        "y": 228,
+        "wires": [
+            [
+                "44447696.fc56d8"
+            ],
+            [
+                "c7961919.cc7cf8",
+                "bdef7331.484b7"
+            ],
+            [
+                "a26e4fb2.877fb"
+            ]
+        ]
+    },
+    {
+        "id": "c7961919.cc7cf8",
+        "type": "switch",
+        "z": "4b47108c.58227",
+        "name": "Off",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 1,
+        "x": 494,
+        "y": 199,
+        "wires": [
+            [
+                "878b331c.98364",
+                "a2e74fc6.51a48"
+            ]
+        ]
+    },
+    {
+        "id": "878b331c.98364",
+        "type": "debug",
+        "z": "4b47108c.58227",
+        "name": "Motor 1",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1099,
+        "y": 31.5,
+        "wires": []
+    },
+    {
+        "id": "a2e74fc6.51a48",
+        "type": "debug",
+        "z": "4b47108c.58227",
+        "name": "Motor 2",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1095,
+        "y": 226.5,
+        "wires": []
+    },
+    {
+        "id": "bdef7331.484b7",
+        "type": "switch",
+        "z": "4b47108c.58227",
+        "name": "On",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 1,
+        "x": 493,
+        "y": 263,
+        "wires": [
+            [
+                "d670f631.a6e298"
+            ]
+        ]
+    },
+    {
+        "id": "3d75d245.be4c5e",
+        "type": "change",
+        "z": "4b47108c.58227",
+        "name": "Set Direction Clockwise",
+        "rules": [
+            {
+                "t": "set",
+                "p": "direction",
+                "pt": "flow",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 477,
+        "y": 358,
+        "wires": [
+            [
+                "d670f631.a6e298"
+            ]
+        ]
+    },
+    {
+        "id": "f3bbeae6.4e5bb8",
+        "type": "change",
+        "z": "4b47108c.58227",
+        "name": "Set Direction Counter Clockwise",
+        "rules": [
+            {
+                "t": "set",
+                "p": "direction",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 417,
+        "wires": [
+            [
+                "d670f631.a6e298"
+            ]
+        ]
+    },
+    {
+        "id": "d670f631.a6e298",
+        "type": "function",
+        "z": "4b47108c.58227",
+        "name": "Get Direction",
+        "func": "var direction = flow.get('direction')||0;\nmsg.payload = direction;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 713,
+        "y": 300,
+        "wires": [
+            [
+                "878b331c.98364",
+                "ad0a7311.d5efb"
+            ]
+        ]
+    },
+    {
+        "id": "ad0a7311.d5efb",
+        "type": "function",
+        "z": "4b47108c.58227",
+        "name": "Invert",
+        "func": "if (msg.payload == 1) {\n    msg.payload = 0;\n}\nelse\n{\n    msg.payload = 1;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 901,
+        "y": 303,
+        "wires": [
+            [
+                "a2e74fc6.51a48"
+            ]
+        ]
+    },
+    {
+        "id": "a26e4fb2.877fb",
+        "type": "switch",
+        "z": "4b47108c.58227",
+        "name": "Direction",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 253,
+        "y": 398,
+        "wires": [
+            [
+                "3d75d245.be4c5e"
+            ],
+            [
+                "f3bbeae6.4e5bb8"
+            ]
+        ]
+    },
+    {
+        "id": "44447696.fc56d8",
+        "type": "debug",
+        "z": "4b47108c.58227",
+        "name": "Motor Speed",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 353,
+        "y": 127.5,
+        "wires": []
+    },
+    {
+        "id": "b5ff647d.2e1f28",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b1f2d292.4a81d",
+        "type": "alexa-home",
+        "z": "b5ff647d.2e1f28",
+        "conf": "c4f195f4.b12198",
+        "device": "80888",
+        "acknoledge": true,
+        "name": "outside light",
+        "topic": "",
+        "x": 75,
+        "y": 1311,
+        "wires": [
+            [
+                "5671e484.f9574c"
+            ]
+        ]
+    },
+    {
+        "id": "7ce62dbc.444b84",
+        "type": "alexa-home",
+        "z": "b5ff647d.2e1f28",
+        "conf": "c4f195f4.b12198",
+        "device": "80889",
+        "acknoledge": true,
+        "name": "fan",
+        "topic": "",
+        "x": 55,
+        "y": 1465,
+        "wires": [
+            [
+                "2863db7f.5f0204"
+            ]
+        ]
+    },
+    {
+        "id": "d507cc8a.741d4",
+        "type": "ui_switch",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "deace47b.7c16e8",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 259,
+        "y": 1174,
+        "wires": [
+            [
+                "509d0f6c.0b9af"
+            ]
+        ]
+    },
+    {
+        "id": "c151c68c.fcc188",
+        "type": "ui_switch",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "label": "room light",
+        "tooltip": "",
+        "group": "deace47b.7c16e8",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 263,
+        "y": 1255,
+        "wires": [
+            [
+                "7e0ada09.87bc54"
+            ]
+        ]
+    },
+    {
+        "id": "5671e484.f9574c",
+        "type": "ui_switch",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "label": "outside light",
+        "tooltip": "",
+        "group": "deace47b.7c16e8",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 268,
+        "y": 1349,
+        "wires": [
+            [
+                "9c41eb66.1010b8"
+            ]
+        ]
+    },
+    {
+        "id": "2863db7f.5f0204",
+        "type": "ui_switch",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "label": "fan",
+        "tooltip": "",
+        "group": "deace47b.7c16e8",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 262,
+        "y": 1445,
+        "wires": [
+            [
+                "c5edac4f.87ea9"
+            ]
+        ]
+    },
+    {
+        "id": "509d0f6c.0b9af",
+        "type": "rpi-gpio out",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "pin": "11",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "x": 478,
+        "y": 1061,
+        "wires": []
+    },
+    {
+        "id": "7e0ada09.87bc54",
+        "type": "rpi-gpio out",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "pin": "13",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "x": 514,
+        "y": 1170,
+        "wires": []
+    },
+    {
+        "id": "9c41eb66.1010b8",
+        "type": "rpi-gpio out",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "pin": "15",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "x": 521,
+        "y": 1258,
+        "wires": []
+    },
+    {
+        "id": "c5edac4f.87ea9",
+        "type": "rpi-gpio out",
+        "z": "b5ff647d.2e1f28",
+        "name": "",
+        "pin": "16",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "x": 547,
+        "y": 1352,
+        "wires": []
+    },
+    {
+        "id": "25501e12.161072",
+        "type": "alexa-home",
+        "z": "b5ff647d.2e1f28",
+        "conf": "c4f195f4.b12198",
+        "device": "80887",
+        "acknoledge": true,
+        "name": "room light",
+        "topic": "",
+        "x": 68.5,
+        "y": 1209,
+        "wires": [
+            [
+                "c151c68c.fcc188"
+            ]
+        ]
+    },
+    {
+        "id": "12c0425f.6c3c1e",
+        "type": "alexa-home",
+        "z": "b5ff647d.2e1f28",
+        "conf": "c4f195f4.b12198",
+        "device": "64730",
+        "acknoledge": true,
+        "name": "switch",
+        "topic": "",
+        "x": 80.5,
+        "y": 1103,
+        "wires": [
+            [
+                "d507cc8a.741d4"
+            ]
+        ]
+    },
+    {
+        "id": "c11d764e.ad5b58",
+        "type": "rpi-gpio out",
+        "z": "b5ff647d.2e1f28",
+        "name": "Right Motor Speed (PWM)",
+        "pin": "8",
+        "set": "",
+        "level": "0",
+        "out": "pwm",
+        "x": 554,
+        "y": 2074,
+        "wires": []
+    },
+    {
+        "id": "ba670c7e.c2356",
+        "type": "inject",
+        "z": "b5ff647d.2e1f28",
+        "name": "Slow",
+        "topic": "Speed",
+        "payload": "20",
+        "payloadType": "num",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 79,
+        "y": 2025,
+        "wires": [
+            [
+                "4ed0bc11.4abd24"
+            ]
+        ]
+    },
+    {
+        "id": "3214bc93.abe1a4",
+        "type": "inject",
+        "z": "b5ff647d.2e1f28",
+        "name": "Fast",
+        "topic": "Speed",
+        "payload": "45",
+        "payloadType": "num",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 83,
+        "y": 2089,
+        "wires": [
+            [
+                "4ed0bc11.4abd24"
+            ]
+        ]
+    },
+    {
+        "id": "51cb2b83.75da94",
+        "type": "rpi-gpio out",
+        "z": "b5ff647d.2e1f28",
+        "name": "Right Motor Pin 1",
+        "pin": "19",
+        "set": true,
+        "level": "0",
+        "out": "out",
+        "x": 587,
+        "y": 1943,
+        "wires": []
+    },
+    {
+        "id": "66263118.2c688",
+        "type": "inject",
+        "z": "b5ff647d.2e1f28",
+        "name": "Go",
+        "topic": "On",
+        "payload": "1",
+        "payloadType": "num",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 79,
+        "y": 2162.5,
+        "wires": [
+            [
+                "4ed0bc11.4abd24"
+            ]
+        ]
+    },
+    {
+        "id": "ca00c77.8d7a038",
+        "type": "inject",
+        "z": "b5ff647d.2e1f28",
+        "name": "Stop",
+        "topic": "On",
+        "payload": "0",
+        "payloadType": "num",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 85,
+        "y": 2231,
+        "wires": [
+            [
+                "4ed0bc11.4abd24"
+            ]
+        ]
+    },
+    {
+        "id": "b12ecbb7.a05858",
+        "type": "rpi-gpio out",
+        "z": "b5ff647d.2e1f28",
+        "name": "Right Motor Pin 2",
+        "pin": "22",
+        "set": true,
+        "level": "0",
+        "out": "out",
+        "x": 600,
+        "y": 1998,
+        "wires": []
+    },
+    {
+        "id": "87530476.33e7a8",
+        "type": "inject",
+        "z": "b5ff647d.2e1f28",
+        "name": "Forward",
+        "topic": "Direction",
+        "payload": "1",
+        "payloadType": "num",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 95,
+        "y": 2294.5,
+        "wires": [
+            [
+                "4ed0bc11.4abd24"
+            ]
+        ]
+    },
+    {
+        "id": "c1cf5def.a343",
+        "type": "inject",
+        "z": "b5ff647d.2e1f28",
+        "name": "Backwards",
+        "topic": "Direction",
+        "payload": "0",
+        "payloadType": "num",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 94,
+        "y": 2363,
+        "wires": [
+            [
+                "4ed0bc11.4abd24"
+            ]
+        ]
+    },
+    {
+        "id": "4ed0bc11.4abd24",
+        "type": "subflow:4b47108c.58227",
+        "z": "b5ff647d.2e1f28",
+        "x": 345,
+        "y": 2040.5,
+        "wires": [
+            [
+                "51cb2b83.75da94"
+            ],
+            [
+                "b12ecbb7.a05858"
+            ],
+            [
+                "c11d764e.ad5b58"
+            ]
+        ]
+    },
+    {
+        "id": "c4f195f4.b12198",
+        "type": "alexa-home-conf",
+        "z": "",
+        "username": "DeDol"
+    },
+    {
+        "id": "deace47b.7c16e8",
+        "type": "ui_group",
+        "z": "",
+        "name": "HOME AUTOMATION",
+        "tab": "9f47ef69.0cb2a",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "9f47ef69.0cb2a",
+        "type": "ui_tab",
+        "z": "",
+        "name": "HOME AUTOMATION",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
